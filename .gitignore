@@ -1,0 +1,34 @@
+# Restricted raw and processed data
+/data/*
+!/data/README.md
+/experiments/prepared_data/processed/
+/experiments/prepared_data/*
+!/experiments/prepared_data/01_data_preparation.ipynb
+/experiments/contrastive_v1/image.png
+/.private-backup/
+*.tsv
+*.csv
+*.jsonl
+*.rar
+*.zip
+
+# Model artifacts and per-example predictions
+**/cache/
+**/model_runs/
+**/predictions/
+**/predictions.tsv
+*.pt
+*.pth
+*.safetensors
+*.bin
+
+# Local environments and editor state
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.idea/
+.vscode/
+.env
+.env.*
