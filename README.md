@@ -1,15 +1,6 @@
-# StereoQueerEval：实验进展
-
-更新日期：2026-10-24。
-
-## 本次更新
-
-- 数据准备启用 `CLEAN_DESCRIPTION=True`，清理视频描述中的推广行；清洗后为空时保留原文。
-- v1（批内 SCL）的 A/B/C 统一配置为 8 epochs、batch size 8、梯度累积 2、weight decay 0.03、SCL 权重 0.1、temperature 0.1。
-- 更新 A/B/C 在验证集上单独加载 checkpoint 得到的独立评估结果。
-
+# StereoQueerEval：实验记录
 ## 数据与方法
-
+- 数据准备启用 `CLEAN_DESCRIPTION=True`，清理视频描述中的推广行；清洗后为空时保留原文。
 使用 EN、IT、NL 共 7,627 条样本，`grouped_multilingual` 划分为训练 6,106 条、验证 1,521 条。按语言与原始视频标题、描述构造上下文分组，避免同组跨训练与验证集；该分组是视频上下文的代理标识。FA 的 100 条开发样本不参与当前训练，尚未记录评估结果。
 
 编码器为 `FacebookAI/xlm-roberta-base`，输入为评论、标题与描述拼接后截断至 512 tokens，采用均值池化和任务分类头。A 为刻板印象二分类，B 为仇恨言论三分类，C 为对象范围分类与 9 个身份多标签预测。训练损失为监督损失加监督对比损失。
@@ -18,8 +9,9 @@
 - **v2：MoCo-SCL**，使用动量模型与带标签队列，queue size=4096、momentum=0.999；保留历史实现与结果。
 
 共同设置：seed=42、learning rate=2e-5、dropout=0.1、projection dim=128、AdamW、warmup ratio=0.1。v2 仍为 3 epochs、batch size 4、梯度累积 4、weight decay 0.01。
-
-## 最新本地结果
+- v1（批内 SCL）的 A/B/C 统一配置为 8 epochs、batch size 8、梯度累积 2、weight decay 0.03、SCL 权重 0.1、temperature 0.1。
+- 更新 A/B/C 在验证集上单独加载 checkpoint 得到的独立评估结果。
+## 本地结果
 
 分数范围为 0–1，均为本地验证指标，**不是 Codabench 官方测试成绩**。
 
@@ -31,19 +23,6 @@
 
 A/B/C 的独立评估主指标与可见训练日志最高值一致，分别出现在第 6/5/7 轮。C 的范围 Macro-F1 为 **0.811704**，身份 Macro-F1 为 **0.348667**。C 仅在 790 条真实仇恨验证样本上评估，不包含 B 的误判，不能视为端到端 B→C 的成绩。“独立评估”指单独加载 checkpoint 运行评估脚本，使用的仍是验证集。
 
-数据准备当前已开启清洗，但训练输出未记录数据版本指纹，尚不能仅凭这些输出确认各次运行使用的数据快照。后续复核需对齐处理数据、checkpoint 与评估配置。
-
-### 历史结果参考
-
-以下保留自上次整理的独立评估记录，不代表新版重新评估。
-
-| 任务与指标 | 历史 v1 | 历史 v2 |
-| --- | ---: | ---: |
-| A Macro-F1 | 0.716902 | 0.719947 |
-| B Macro-F1 | 0.512022 | 0.514733 |
-| C Target exact match | 0.605063 | 0.587342 |
-
-新版 v1 的 A/B Macro-F1 与 C 对象完全匹配率均高于历史记录。由于数据处理配置与部分训练参数同时变化，不能将差异单独归因于描述清洗或对比学习机制。现有结果为单种子、单划分，未完成无 SCL 基线或跨种子验证。历史 v1-A 训练日志值为 0.719019，与历史独立评估值不一致；此处保留独立评估口径。
 
 ## Codabench 测试状态
 
@@ -55,4 +34,4 @@ A/B/C 的独立评估主指标与可见训练日志最高值一致，分别出�
 
 - [数据准备](experiments/prepared_data/01_data_preparation.ipynb)：修改 `PROJECT` 后运行。
 - [v1 训练与评估](experiments/contrastive_v1/) · [v2 训练与评估](experiments/contrastive_v2/)。
-- [数据来源与使用协议](data/README.md)。仅发布代码与汇总结果；原文、预测及权重不上传。Notebook 输出已在本地备份后清除。
+- [数据来源与使用协议](data/README.md)。
