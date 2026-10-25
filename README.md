@@ -71,5 +71,4 @@ C 的范围 Macro-F1 为 **0.811704**，身份 Macro-F1 为 **0.348667**。C 在
 - [数据准备](experiments/prepared_data/01_data_preparation.ipynb)：修改 `PROJECT` 后运行；`CLEAN_DESCRIPTION` 位于最后一个代码单元。
 - [v1 训练与评估](experiments/contrastive_v1/) · [v2 训练与评估](experiments/contrastive_v2/)：分别运行 `A/B/C.ipynb` 和对应的 `*_evaluation_prediction.ipynb`。
 - 训练数据目录为 `/content/drive/MyDrive/prepared_data`；v1、v2 输出目录分别为 `/content/drive/MyDrive/contrastive_outputs`、`/content/drive/MyDrive/contrastive_outputs_v2`。
-- 评估配置为 `EVALUATION_SPLIT="grouped_multilingual"`，读取 `validation_ids`；`CHECKPOINT` 指向对应运行的 `best/`。
 - [数据来源与使用协议](data/README.md)。仓库仅发布代码与汇总结果，数据集保留在本地。
